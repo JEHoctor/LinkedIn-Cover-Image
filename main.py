@@ -58,14 +58,14 @@ def main():
     )
     svg_image = ET.ElementTree(element=svg_root)
 
-    # Add a white background.
+    # Add a black background.
     background = ET.SubElement(
         parent=svg_root,
         tag='rect',
         attrib={
             'width': '100%',
             'height': '100%',
-            'fill': get_color(0.85)
+            'fill': 'black'
         }
     )
 
@@ -77,7 +77,7 @@ def main():
                 tag='polygon',
                 attrib={
                     'points': get_hexagon(s, t),
-                    'fill': get_color(0.15)
+                    'fill': get_color(np.random.rand())
                 }
             )
 
