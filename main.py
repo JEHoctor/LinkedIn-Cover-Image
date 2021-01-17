@@ -64,7 +64,7 @@ def main():
     svg_image = ET.ElementTree(element=svg_root)
 
     # Add a black background.
-    background = ET.SubElement(
+    ET.SubElement(
         parent=svg_root,
         tag='rect',
         attrib={
@@ -80,7 +80,7 @@ def main():
     # Add a grid of hexagons.
     for s in range(-5, 52):
         for t in range(11):
-            hexagon = ET.SubElement(
+            ET.SubElement(
                 parent=svg_root,
                 tag='polygon',
                 attrib={
