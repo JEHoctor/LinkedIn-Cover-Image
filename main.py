@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 from math import sin, cos, pi, sqrt
 from pathlib import Path
+import sys
 
 from cairosvg import svg2png
 from matplotlib.cm import get_cmap
 import numpy as np
 import xml.etree.ElementTree as ET
 
+here = Path(__file__).parent
+sys.path.insert(0, str(here))
+
+from pattern_generators import random_pattern
+
 
 # locations for output files
-here = Path(__file__).parent
 out_svg = here / 'cover_image.svg'
 out_png = here / 'cover_image.png'
 
@@ -69,6 +74,9 @@ def main():
         }
     )
 
+    # A pattern defines a mapping from s, t coordinates to [0, 1]
+    pattern = random_pattern
+
     # Add a grid of hexagons.
     for s in range(-5, 52):
         for t in range(11):
@@ -77,7 +85,7 @@ def main():
                 tag='polygon',
                 attrib={
                     'points': get_hexagon(s, t),
-                    'fill': get_color(np.random.rand())
+                    'fill': get_color(pattern(s, t))
                 }
             )
 
