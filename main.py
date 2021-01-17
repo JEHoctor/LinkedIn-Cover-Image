@@ -69,15 +69,17 @@ def main():
         }
     )
 
-    # Add a (roughly) central hexagon.
-    hexagon = ET.SubElement(
-        parent=svg_root,
-        tag='polygon',
-        attrib={
-            'points': get_hexagon(25, 4),
-            'fill': get_color(0.15)
-        }
-    )
+    # Add a grid of hexagons.
+    for s in range(-5, 52):
+        for t in range(11):
+            hexagon = ET.SubElement(
+                parent=svg_root,
+                tag='polygon',
+                attrib={
+                    'points': get_hexagon(s, t),
+                    'fill': get_color(0.15)
+                }
+            )
 
     # Write the result files.
     svg_image.write(
