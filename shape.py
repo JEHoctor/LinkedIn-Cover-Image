@@ -28,9 +28,9 @@ class Shape(abc.ABC):
 
     def __call__(self) -> Iterator[list[tuple[float, float]]]:
         """Generate polygons of the image"""
-        side_length = self.scale
+        scale = self.scale
         for vertices in self.generate_units():
-            yield [(x * side_length, y * side_length) for x, y in vertices]
+            yield [(x * scale, y * scale) for x, y in vertices]
 
     @abc.abstractmethod
     def generate_units(self) -> Iterator[list[tuple[float, float]]]:
