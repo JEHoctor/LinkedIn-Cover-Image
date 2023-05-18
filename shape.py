@@ -5,6 +5,7 @@ from collections.abc import Iterator
 from math import cos, pi, sin, sqrt
 
 import numpy as np
+from numpy.linalg import matrix_power
 
 
 def rot_matrix(theta):
@@ -36,42 +37,45 @@ class Shape(abc.ABC):
         """Generate unit polygons"""
         raise NotImplementedError()
 
+
 class Hexagon(Shape):
 
     def generate_units(self) -> Iterator[list[tuple[float, float]]]:
         """Generate hexagons one unit wide"""
+        rot60 = rot_matrix(pi/3)
+        placement_wrt_s = self.padding_factor * np.array([1, 0])
+        placement_wrt_t = rot60 @ placement_wrt_s
         units = self.scale * self.padding_factor
         y_start = 0
-        y_end = self.out_height / units * 2 / sqrt(3)
-        x_start = y_end / 2
-        x_end = self.out_width / units
-        rot_60 = rot_matrix(pi/3)
-        placement_wrt_s = self.padding_factor * np.array([1, 0])
-        placement_wrt_t = rot_60 @ placement_wrt_s
-        for s in range(-int(x_start), 1 + int(x_end)):
-            for t in range(y_start, 1 + int(y_end)):
-                base_point = placement_wrt_s*s + placement_wrt_t*t
+        y_end = 1 + int(self.out_height / units * 2 / sqrt(3))
+        x_start = int(-y_end / 2)
+        x_end = 1 + int(self.out_width / units)
+        for s in range(x_start, x_end):
+            for t in range(y_start, y_end):
+                base_p = placement_wrt_s*s + placement_wrt_t*t
                 offset = np.array([0.5, 0.5/sqrt(3)])
-                yield [base_point + np.linalg.matrix_power(rot_60, i) @ offset for i in range(6)]
+                yield [base_p + matrix_power(rot60, i) @ offset for i in range(6)]
+
 
 class Triangle(Shape):
 
     def generate_units(self):
         """Generate triangles of side length one unit"""
+        rot60 = rot_matrix(pi/3)
+        rot120 = rot_matrix(2*pi/3)
+        placement_wrt_s = self.padding_factor * np.array([1, 0])
+        placement_wrt_t = self.padding_factor * np.array([0, sqrt(3) / 2])
         units = self.scale * self.padding_factor
         x_end = self.out_width / units
         y_end = self.out_height / units * 2 / sqrt(3)
-        rot_60 = rot_matrix(pi/3)
-        rot_120 = rot_matrix(2*pi/3)
-        placement_wrt_s = self.padding_factor * np.array([1, 0])
-        placement_wrt_t = self.padding_factor * np.array([0, sqrt(3) / 2])
         for t in range(0, 2 + int(y_end)):
             for s in range(0, 2 + int(x_end)):
                 s = s if t % 2 else s - 0.5  # horizontal offset on odd rows
-                base_point = placement_wrt_s*s + placement_wrt_t*t
-                offset = np.array([0.5, 0.5/sqrt(3)])
-                yield [base_point + np.linalg.matrix_power(rot_120, i) @ offset for i in range(3)]
 
-                base_point += self.padding_factor * np.array([0.5, 1/sqrt(3) - sqrt(3)/2])
-                offset = rot_60 @ offset
-                yield [base_point + np.linalg.matrix_power(rot_120, i) @ offset for i in range(3)]
+                base_p = placement_wrt_s*s + placement_wrt_t*t
+                offset = np.array([0.5, 0.5/sqrt(3)])
+                yield [base_p + matrix_power(rot120, i) @ offset for i in range(3)]
+
+                base_p += self.padding_factor * np.array([0.5, 1/sqrt(3) - sqrt(3)/2])
+                offset = rot60 @ offset
+                yield [base_p + matrix_power(rot120, i) @ offset for i in range(3)]

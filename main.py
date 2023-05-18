@@ -13,6 +13,7 @@ from shape import Hexagon, Shape, Triangle
 here = Path(__file__).parent
 sys.path.insert(0, str(here))
 
+_name_to_shape = {s.__name__: s for s in (Hexagon, Triangle)}
 
 # locations for output files
 out_svg = here / 'cover_image.svg'
@@ -29,10 +30,13 @@ def get_color(x):
     color_bytes = colormap(x, bytes=True)[:3]
     return f'rgb{color_bytes}'
 
-_name_to_shape = {s.__name__: s for s in (Hexagon, Triangle)}
 
-@click.command
-@click.option('--shape', type=click.Choice(tuple(_name_to_shape), case_sensitive=False), default='Hexagon')
+@click.command()
+@click.option(
+    '--shape',
+    type=click.Choice(tuple(_name_to_shape), case_sensitive=False),
+    default='Hexagon'
+)
 @click.option('--scale', type=float, default=10)
 @click.option('--padding_factor', type=float, default=1.1)
 @click.option('--width', type=int, default=1128)
@@ -42,6 +46,7 @@ def main(shape, scale, padding_factor, width, height):
     shape_cls = _name_to_shape[shape]
     shape = shape_cls(scale, padding_factor, width, height)
     _main(shape)
+
 
 def _main(shape: Shape):
     # Initialize a blank canvas of the right size.
