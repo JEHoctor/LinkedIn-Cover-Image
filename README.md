@@ -4,4 +4,6 @@
 
 ## Sample Results
 
-![sample result image frm this script](/samples/cover_image.png)
+![sample hexagon tiling from this script](/samples/cover_image.png)
+
+![sample triangle tiling from this script](/samples/triangles.png)
