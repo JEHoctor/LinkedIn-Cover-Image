@@ -42,7 +42,6 @@ def get_color(x):
 @click.option('--width', type=int, default=1128)
 @click.option('--height', type=int, default=191)
 def main(shape, scale, padding_factor, width, height):
-    # Initialize a blank canvas of the right size.
     shape_cls = _name_to_shape[shape]
     shape = shape_cls(scale, padding_factor, width, height)
     _main(shape)
