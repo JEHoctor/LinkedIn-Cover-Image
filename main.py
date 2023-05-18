@@ -1,17 +1,17 @@
 #!/usr/bin/env python
-from math import sin, cos, pi, sqrt
-from pathlib import Path
 import sys
-
-from cairosvg import svg2png
-from matplotlib.cm import get_cmap
-import numpy as np
 import xml.etree.ElementTree as ET
+from math import cos, pi, sin, sqrt
+from pathlib import Path
+
+import numpy as np
+from cairosvg import svg2png
+from matplotlib import colormaps
+
+from pattern_generators import random_pattern
 
 here = Path(__file__).parent
 sys.path.insert(0, str(here))
-
-from pattern_generators import random_pattern
 
 
 # locations for output files
@@ -20,7 +20,7 @@ out_png = here / 'cover_image.png'
 
 
 # basic static result properties
-colormap = get_cmap('viridis')
+colormap = colormaps.get_cmap('viridis')
 out_width = 1128
 out_height = 191
 scale = 10
@@ -55,7 +55,7 @@ def get_hexagon(s, t):
 def main():
     # Initialize a blank canvas of the right size.
     svg_root = ET.Element(
-        tag='svg',
+        'svg',
         attrib={
             'viewBox': f'0 0 {out_width} {out_height}',
             'version': '1.1'
@@ -65,8 +65,8 @@ def main():
 
     # Add a black background.
     ET.SubElement(
-        parent=svg_root,
-        tag='rect',
+        svg_root,
+        'rect',
         attrib={
             'width': '100%',
             'height': '100%',
@@ -81,8 +81,8 @@ def main():
     for s in range(-5, 52):
         for t in range(11):
             ET.SubElement(
-                parent=svg_root,
-                tag='polygon',
+                svg_root,
+                'polygon',
                 attrib={
                     'points': get_hexagon(s, t),
                     'fill': get_color(pattern(s, t))
