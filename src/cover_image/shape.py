@@ -36,7 +36,7 @@ class Shape(abc.ABC):
     @abc.abstractmethod
     def generate_units(self) -> Iterator[list[tuple[float, float]]]:
         """Generate unit polygons"""
-        raise NotImplementedError()
+        ...
 
 
 class Hexagon(Shape):
