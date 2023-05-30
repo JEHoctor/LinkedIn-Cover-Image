@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkedin-cover-image"
+version = "0.0.1"
+authors = [
+    {name = "James Hoctor", email = "jehoctor@protonmail.com"}
+]
+description = "Make geometric banner images for LinkedIn."
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = [
+    "CairoSVG",
+    "click",
+    "matplotlib",
+    "numpy",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+]
+
+[project.scripts]
+cover-image = "cover_image.main:main"
+
+[project.urls]
+"Homepage" = "https://github.com/JEHoctor/LinkedIn-Cover-Image"
+
+[project.optional-dependencies]
+dev = ["black", "build", "isort", "jupyter", "pip-tools", "pytest", "ruff", "seaborn", "twine"]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+py_version=311
+sections="FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+import_heading_stdlib="standard libraries"
+import_heading_thirdparty="third party libraries"
+import_heading_firstparty="cover image libraries"
+
+[tool.ruff]
+per-file-ignores = {"__init__.py" = ["F401"]}
+line-length = 120

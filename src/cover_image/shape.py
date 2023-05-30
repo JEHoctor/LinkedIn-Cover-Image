@@ -1,19 +1,20 @@
 """Manage the tilings"""
 
+# standard libraries
 import abc
 from collections.abc import Iterator
 from math import cos, pi, sin, sqrt
 
+# third party libraries
 import numpy as np
 from numpy.linalg import matrix_power
 
 
 def rot_matrix(theta):
-    return np.array([[cos(theta), -sin(theta)], [sin(theta),  cos(theta)]])
+    return np.array([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
 
 
 class Shape(abc.ABC):
-
     def __init__(
         self,
         scale: float,
@@ -39,10 +40,9 @@ class Shape(abc.ABC):
 
 
 class Hexagon(Shape):
-
     def generate_units(self) -> Iterator[list[tuple[float, float]]]:
         """Generate hexagons one unit wide"""
-        rot60 = rot_matrix(pi/3)
+        rot60 = rot_matrix(pi / 3)
         placement_wrt_s = self.padding_factor * np.array([1, 0])
         placement_wrt_t = rot60 @ placement_wrt_s
         units = self.scale * self.padding_factor
@@ -52,17 +52,16 @@ class Hexagon(Shape):
         x_end = 1 + int(self.out_width / units)
         for s in range(x_start, x_end):
             for t in range(y_start, y_end):
-                base_p = placement_wrt_s*s + placement_wrt_t*t
-                offset = np.array([0.5, 0.5/sqrt(3)])
+                base_p = placement_wrt_s * s + placement_wrt_t * t
+                offset = np.array([0.5, 0.5 / sqrt(3)])
                 yield [base_p + matrix_power(rot60, i) @ offset for i in range(6)]
 
 
 class Triangle(Shape):
-
     def generate_units(self):
         """Generate triangles of side length one unit"""
-        rot60 = rot_matrix(pi/3)
-        rot120 = rot_matrix(2*pi/3)
+        rot60 = rot_matrix(pi / 3)
+        rot120 = rot_matrix(2 * pi / 3)
         placement_wrt_s = self.padding_factor * np.array([1, 0])
         placement_wrt_t = self.padding_factor * np.array([0, sqrt(3) / 2])
         units = self.scale * self.padding_factor
@@ -72,10 +71,10 @@ class Triangle(Shape):
             for s in range(0, 2 + int(x_end)):
                 s = s if t % 2 else s - 0.5  # horizontal offset on odd rows
 
-                base_p = placement_wrt_s*s + placement_wrt_t*t
-                offset = np.array([0.5, 0.5/sqrt(3)])
+                base_p = placement_wrt_s * s + placement_wrt_t * t
+                offset = np.array([0.5, 0.5 / sqrt(3)])
                 yield [base_p + matrix_power(rot120, i) @ offset for i in range(3)]
 
-                base_p += self.padding_factor * np.array([0.5, 1/sqrt(3) - sqrt(3)/2])
+                base_p += self.padding_factor * np.array([0.5, 1 / sqrt(3) - sqrt(3) / 2])
                 offset = rot60 @ offset
                 yield [base_p + matrix_power(rot120, i) @ offset for i in range(3)]
