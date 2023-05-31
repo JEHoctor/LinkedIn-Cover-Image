@@ -16,6 +16,7 @@ dependencies = [
     "click",
     "matplotlib",
     "numpy",
+    "scikit-learn",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
