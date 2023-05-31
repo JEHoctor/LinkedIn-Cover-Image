@@ -1,6 +1,3 @@
-import random
-import sys
-
 # third party libraries
 import numpy as np
 from sklearn import gaussian_process as gp

@@ -10,7 +10,8 @@ from cairosvg import svg2png
 from matplotlib import colormaps
 
 # cover image libraries
-from cover_image.pattern_generators import gaussian_process_pattern, random_pattern
+from cover_image.pattern_generators import (gaussian_process_pattern,
+                                            random_pattern)
 from cover_image.shape import Hexagon, Shape, Triangle
 
 _name_to_shape = {s.__name__: s for s in (Hexagon, Triangle)}
