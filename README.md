@@ -7,3 +7,5 @@
 ![sample hexagon tiling from this script](/samples/cover_image.png)
 
 ![sample triangle tiling from this script](/samples/triangles.png)
+
+![sample Gaussian process pattern from this script](/samples/gaussian_process.png)
