@@ -30,7 +30,7 @@ colormap = colormaps.get_cmap("viridis")
 def get_color(x):
     if not (0 <= x <= 1):
         raise ValueError("can only convert values in [0, 1] to colors")
-    color_bytes = colormap(x, bytes=True)[:3]
+    color_bytes = tuple(map(int, colormap(x, bytes=True)[:3]))
     return f"rgb{color_bytes}"
 
 
